@@ -1,14 +1,14 @@
 # Bored Board Games
 
-A modern e-commerce platform for board games. MVP includes product catalog, cart, Stripe and layaway checkout, and admin endpoints.
+A modern e-commerce platform for board games. MVP includes product catalog, persistent cart, Stripe and layaway checkout, and a full-featured admin dashboard (CRUD, layaway toggle).
 
 ---
 
 ## Project Overview
 
-- **MVP:** Product catalog, cart, Stripe and layaway checkout, and admin endpoints.
+- **MVP:** Product catalog, persistent cart (global, localStorage), Stripe and layaway checkout, admin dashboard (CRUD for products/categories, layaway toggle), toasts for user feedback.
 - **Phases:** Marketplace expansion, community/social, and enterprise/scale features.
-- **Stack:** Next.js 14.x (App Router, TypeScript, MUI), FastAPI backend, Stripe integration.
+- **Stack:** Next.js 14.x (App Router, TypeScript), FastAPI backend, Stripe integration, Dockerized.
 - **All work is done in:** `~/Documents/GitHub/BoredBoardGames`
 - **Source of truth:** [BoredBoardGames GitHub](https://github.com/mastershaman369/BoredBoardGames.git)
 
@@ -31,15 +31,31 @@ docker compose up --build
 
 - Frontend: [http://localhost:3000](http://localhost:3000)
 - Backend API: [http://localhost:8000/api](http://localhost:8000/api)
+- Admin Dashboard: [http://localhost:3000/admin](http://localhost:3000/admin)
 
 ---
 
 ## Features
 
-- Modern, responsive UI (Next.js + MUI, light/dark mode)
-- Product grid, cart, checkout (Stripe + layaway)
-- Admin endpoints for orders and layaway toggle
+- Modern, responsive UI (Next.js + custom CSS)
+- Product grid, detail pages, persistent cart (global, localStorage)
+- Checkout: Stripe & layaway (admin-togglable)
+- Toasts/alerts for all cart and admin actions
+- Full-featured admin dashboard:
+  - View/add/edit/delete products and categories
+  - Toggle layaway on/off (live, in-memory)
+  - View all orders
+- All changes are in-memory for MVP (no DB required)
 - Fully documented, secure, and ready for phased expansion
+
+---
+
+## Admin Usage
+
+- Go to `/admin` for the dashboard.
+- Manage products/categories (add, edit, delete) and toggle layaway live.
+- All admin changes are reflected instantly for users.
+- Orders and layaway status are visible for admin review.
 
 ---
 

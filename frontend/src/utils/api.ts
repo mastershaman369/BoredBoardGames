@@ -4,8 +4,14 @@ const API_BASE = typeof window === "undefined"
   ? process.env.NEXT_PUBLIC_API_BASE || "http://backend:8000/api"
   : process.env.NEXT_PUBLIC_API_BASE || "/api";
 
-export const getProducts = async () => {
-  const res = await axios.get(`${API_BASE}/products`);
+export const getProducts = async (categoryId?: string) => {
+  const url = categoryId ? `${API_BASE}/products?category_id=${categoryId}` : `${API_BASE}/products`;
+  const res = await axios.get(url);
+  return res.data;
+};
+
+export const getCategories = async () => {
+  const res = await axios.get(`${API_BASE}/categories`);
   return res.data;
 };
 
@@ -20,6 +26,11 @@ export const createStripeCheckoutSession = async (line_items: any[]) => {
 };
 
 export const getLayawayEnabled = async () => {
-  const res = await axios.get(`${API_BASE}/settings/layaway`);
+  const res = await axios.get(`${API_BASE}/settings`);
   return res.data.layaway_enabled;
+};
+
+export const setLayawayEnabled = async (enabled: boolean) => {
+  const res = await axios.put(`${API_BASE}/settings`, { layaway_enabled: enabled });
+  return res.data;
 };
