@@ -7,7 +7,22 @@ A modern e-commerce platform for board games. MVP includes product catalog, pers
 ## Project Overview
 
 - **MVP:** Product catalog, persistent cart (global, localStorage), Stripe and layaway checkout, admin dashboard (CRUD for products/categories, layaway toggle), toasts for user feedback.
-- **Phases:** Marketplace expansion, community/social, and enterprise/scale features.
+- **Phase 2 (Production Readiness):**
+  - Migrate all data to MongoDB (Beanie ODM)
+  - Add secure JWT-based admin authentication
+  - Implement automated testing (Pytest, Jest/RTL, Cypress)
+  - CI/CD with GitHub Actions, Vercel (frontend), Render (backend), MongoDB Atlas
+  - Structured logging & Sentry error tracking
+  - Documentation and security best practices
+- **Phase 3 (Marketplace Expansion):**
+  - Multi-vendor support, vendor dashboard, customer accounts, role-based access control
+  - See [Marketplace Expansion Plan](./PHASE_3_MARKETPLACE_PLAN.md)
+- **Phase 4 (Community & Engagement):**
+  - Product reviews, wishlists, user profiles, forums
+  - See [Community & Engagement Plan](./PHASE_4_COMMUNITY_PLAN.md)
+- **Phase 5 (Enterprise & Scale):**
+  - Caching, CDN, analytics, advanced monitoring, load testing, background tasks
+  - See [Enterprise & Scale Plan](./PHASE_5_ENTERPRISE_PLAN.md)
 - **Stack:** Next.js 14.x (App Router, TypeScript), FastAPI backend, Stripe integration, Dockerized.
 - **All work is done in:** `~/Documents/GitHub/BoredBoardGames`
 - **Source of truth:** [BoredBoardGames GitHub](https://github.com/mastershaman369/BoredBoardGames.git)
@@ -17,6 +32,9 @@ A modern e-commerce platform for board games. MVP includes product catalog, pers
 ## Key Documentation
 
 - [Technical Implementation & Overview](./TECHNICAL_OVERVIEW.md) — _Full architecture, phased roadmap, and implementation details._
+- [Marketplace Expansion Plan (Phase 3)](./PHASE_3_MARKETPLACE_PLAN.md)
+- [Community & Engagement Plan (Phase 4)](./PHASE_4_COMMUNITY_PLAN.md)
+- [Enterprise & Scale Plan (Phase 5)](./PHASE_5_ENTERPRISE_PLAN.md)
 
 ---
 
@@ -43,9 +61,14 @@ docker compose up --build
 - Toasts/alerts for all cart and admin actions
 - Full-featured admin dashboard:
   - View/add/edit/delete products and categories
-  - Toggle layaway on/off (live, in-memory)
+  - Toggle layaway on/off (live, persistent)
   - View all orders
-- All changes are in-memory for MVP (no DB required)
+- All changes are persistent in MongoDB (Phase 2+)
+- Secure JWT-based admin login (Phase 2+)
+- Automated testing and CI/CD (Phase 2+)
+- Marketplace, vendor/customer accounts (Phase 3+)
+- Community features: reviews, wishlists, forums (Phase 4+)
+- Enterprise/scale optimizations (Phase 5+)
 - Fully documented, secure, and ready for phased expansion
 
 ---
@@ -53,6 +76,7 @@ docker compose up --build
 ## Admin Usage
 
 - Go to `/admin` for the dashboard.
+- Login required (Phase 2+). Use your admin credentials.
 - Manage products/categories (add, edit, delete) and toggle layaway live.
 - All admin changes are reflected instantly for users.
 - Orders and layaway status are visible for admin review.
@@ -64,13 +88,14 @@ docker compose up --build
 - All contributors must keep documentation up to date.
 - README.md always links to all technical docs and is the entry point for new contributors or resuming work outside of Windsor.
 - For questions, see the FAQ in [TECHNICAL_OVERVIEW.md](./TECHNICAL_OVERVIEW.md).
+- See phase plans for detailed requirements ([Phase 3](./PHASE_3_MARKETPLACE_PLAN.md), [Phase 4](./PHASE_4_COMMUNITY_PLAN.md), [Phase 5](./PHASE_5_ENTERPRISE_PLAN.md)).
 
 ---
 
 ## Development
 
 - All code, builds, and tests must remain in `~/Documents/GitHub/BoredBoardGames`.
-- See TECHNICAL_OVERVIEW.md for stack, roadmap, and workflow rules.
+- See TECHNICAL_OVERVIEW.md and phase plans for stack, roadmap, and workflow rules.
 
 ---
 
@@ -79,9 +104,23 @@ docker compose up --build
 - Never commit secrets or sensitive data.
 - All changes must be tested end-to-end before commit/push.
 - Tag stable releases as `get` (e.g., `get-v1.0.0`).
+- Only push tested, stable code to `main`.
+- Use secure secrets management and environment variables in hosting/CI.
+- Monitor dependencies for vulnerabilities.
+- Enforce HTTPS in production.
 
 ---
 
-**This README and the linked technical overview are the only official sources of project truth. Remove or archive any outdated docs or code before contributing.**
+## CI/CD & Production Readiness (Phase 2+)
 
-For full details, see the technical overview and in-code comments.
+- Automated testing (Pytest, Jest, Cypress) is required before deployment.
+- CI/CD pipeline (GitHub Actions) builds, tests, and deploys to Staging/Production.
+- All secrets managed securely (never committed to Git).
+- Logging and Sentry error tracking are active in all environments.
+- Staging and Production environments are separated (secrets, DBs, deploy targets).
+
+---
+
+**This README and the linked technical overview and phase plans are the only official sources of project truth. Remove or archive any outdated docs or code before contributing.**
+
+For full details, see the technical overview, phase plans, and in-code comments.
