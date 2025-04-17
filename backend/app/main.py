@@ -14,6 +14,10 @@ from .order import Order, OrderItem
 from .user import User
 from .settings import Settings
 
+# Load environment variables from .env
+from dotenv import load_dotenv
+load_dotenv()
+
 app = FastAPI()
 
 # CORS setup for local/frontend dev
@@ -27,8 +31,10 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def app_init():
-    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/boredboardgames")
-    client = AsyncIOMotorClient(MONGODB_URI)
+    MONGO_URI = os.getenv("MONGO_URI")
+    if not MONGO_URI:
+        raise RuntimeError("MONGO_URI not set in environment variables!")
+    client = AsyncIOMotorClient(MONGO_URI)
     await init_beanie(
         database=client.get_default_database(),
         document_models=[Product, Category, Order, OrderItem, User, Settings]
