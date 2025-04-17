@@ -5,6 +5,8 @@ from category import Category
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Sample data for demonstration; replace with real scraped/imported data as needed
 SAMPLE_CATEGORIES = [
@@ -62,8 +64,10 @@ SAMPLE_PRODUCTS = [
 ]
 
 async def main():
-    MONGODB_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017/boredboardgames")
-    client = AsyncIOMotorClient(MONGODB_URI)
+    MONGO_URI = os.getenv("MONGO_URI")
+    if not MONGO_URI:
+        raise RuntimeError("MONGO_URI not set in environment variables!")
+    client = AsyncIOMotorClient(MONGO_URI)
     await init_beanie(database=client.get_default_database(), document_models=[Product, Category])
 
     # Insert categories
