@@ -40,6 +40,10 @@ A modern e-commerce platform for board games. MVP includes product catalog, pers
 
 ## Quick Start (Docker)
 
+### Prerequisites
+- Ensure MongoDB is installed and running locally (e.g. `brew tap mongodb/brew && brew install mongodb-community && brew services start mongodb-community`).
+- Set `MONGO_URI` in `.env` to your MongoDB connection string (e.g. `mongodb://localhost:27017/boredboardgames`).
+
 1. Copy `.env.example` to `.env` in `/backend` and set your Stripe keys.
 2. Run:
 

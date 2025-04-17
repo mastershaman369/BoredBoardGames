@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from pydantic import BaseModel
+from typing import Optional
 from .user import User
 import os
 
@@ -21,7 +22,7 @@ class Token(BaseModel):
     token_type: str
 
 class TokenData(BaseModel):
-    email: str | None = None
+    email: Optional[str] = None
 
 # Password hashing helpers
 def verify_password(plain_password, hashed_password):
@@ -36,7 +37,7 @@ async def authenticate_user(email: str, password: str):
         return None
     return user
 
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
+def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
     expire = datetime.utcnow() + (expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     to_encode.update({"exp": expire})

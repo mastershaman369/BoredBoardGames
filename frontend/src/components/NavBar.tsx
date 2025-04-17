@@ -1,9 +1,11 @@
 "use client";
 import Link from "next/link";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBar() {
   const { cart } = useCart();
+  const { isAuthenticated, logout } = useAuth();
   return (
     <nav style={{
       width: "100%",
@@ -24,6 +26,12 @@ export default function NavBar() {
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
           Home
         </Link>
+        <Link href="/contact" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
+          Contact
+        </Link>
+        <Link href="/privacy" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
+          Privacy
+        </Link>
         <Link href="/cart" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16, position: "relative" }}>
           Cart
           <span style={{
@@ -38,9 +46,25 @@ export default function NavBar() {
             fontWeight: 700
           }}>{cart.length}</span>
         </Link>
-        <Link href="/admin" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
-          Admin
-        </Link>
+        {isAuthenticated ? (
+          <>
+            <Link href="/admin" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
+              Admin
+            </Link>
+            <button onClick={logout} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", fontWeight: 500, fontSize: 16 }}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link href="/login" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
+              Login
+            </Link>
+            <Link href="/register" style={{ color: "#fff", textDecoration: "none", fontWeight: 500, fontSize: 16 }}>
+              Register
+            </Link>
+          </>
+        )}
       </div>
     </nav>
   );
