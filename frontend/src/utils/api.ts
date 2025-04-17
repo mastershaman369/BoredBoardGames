@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 
-const API_BASE = typeof window === "undefined"
+export const API_BASE = typeof window === "undefined"
   ? process.env.NEXT_PUBLIC_API_BASE || "http://backend:8000/api"
   : process.env.NEXT_PUBLIC_API_BASE || "/api";
 

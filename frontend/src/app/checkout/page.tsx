@@ -9,46 +9,41 @@ export default function CheckoutPage() {
   const { cart, removeFromCart, clearCart } = useCart();
   const { showToast } = useToast();
   const [email, setEmail] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("layaway");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
   const total = cart.reduce((sum, item) => sum + item.price, 0);
 
-  const handleLayaway = async () => {
+  const handleConfirmOrder = async () => {
     setLoading(true);
     setError("");
     try {
-      const order = {
-        items: cart,
-        user_email: email,
-        status: "pending_layaway",
-      };
-      const res = await createLayawayOrder(order);
-      clearCart();
-      showToast("Layaway order placed!");
-      router.push("/");
+      if (paymentMethod === "layaway") {
+        const order = {
+          items: cart,
+          user_email: email,
+          status: "pending_layaway",
+        };
+        await createLayawayOrder(order);
+        clearCart();
+        showToast("Layaway order placed!");
+        router.push("/");
+      } else if (paymentMethod === "credit") {
+        // Placeholder: In production, show real card input and call Stripe
+        const line_items = cart.map((product) => ({
+          price_data: {
+            currency: "usd",
+            product_data: { name: product.name },
+            unit_amount: Math.round(product.price * 100),
+          },
+          quantity: 1,
+        }));
+        const res = await createStripeCheckoutSession(line_items);
+        window.location.href = res.url;
+      }
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Layaway failed");
-    }
-    setLoading(false);
-  };
-
-  const handleStripeCheckout = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const line_items = cart.map((product) => ({
-        price_data: {
-          currency: "usd",
-          product_data: { name: product.name },
-          unit_amount: Math.round(product.price * 100),
-        },
-        quantity: 1,
-      }));
-      const res = await createStripeCheckoutSession(line_items);
-      window.location.href = res.url;
-    } catch (err: any) {
-      setError(err.response?.data?.detail || "Stripe checkout failed");
+      setError(err.response?.data?.detail || "Checkout failed");
     }
     setLoading(false);
   };
@@ -79,20 +74,31 @@ export default function CheckoutPage() {
           placeholder="you@email.com"
         />
       </div>
-      <div style={{ display: 'flex', gap: 16, marginTop: 24 }}>
+      <div style={{ margin: "18px 0" }}>
+        <label htmlFor="payment-method" style={{ fontWeight: 600, marginRight: 12 }}>Payment Method:</label>
+        <select
+          id="payment-method"
+          value={paymentMethod}
+          onChange={e => setPaymentMethod(e.target.value)}
+          style={{ padding: 8, borderRadius: 4, border: "1px solid #ccc", width: 160 }}
+        >
+          <option value="layaway">Layaway</option>
+          <option value="credit">Credit Card</option>
+        </select>
+      </div>
+      {paymentMethod === "credit" && (
+        <div style={{ margin: "18px 0", color: '#888' }}>
+          {/* Placeholder for credit card input */}
+          <p>Credit card payment coming soon. (Stripe integration stub)</p>
+        </div>
+      )}
+      <div style={{ display: 'flex', marginTop: 24 }}>
         <button
-          onClick={handleLayaway}
+          onClick={handleConfirmOrder}
           disabled={cart.length === 0 || !email || loading}
           style={{ flex: 1, padding: 12, background: "#1A1A2E", color: "#fff", border: "none", borderRadius: 4, fontWeight: 700, fontSize: 16, cursor: cart.length === 0 || !email || loading ? 'not-allowed' : 'pointer' }}
         >
-          {loading ? "Processing..." : "Checkout with Layaway"}
-        </button>
-        <button
-          onClick={handleStripeCheckout}
-          disabled={cart.length === 0 || !email || loading}
-          style={{ flex: 1, padding: 12, background: "#00ADB5", color: "#fff", border: "none", borderRadius: 4, fontWeight: 700, fontSize: 16, cursor: cart.length === 0 || !email || loading ? 'not-allowed' : 'pointer' }}
-        >
-          {loading ? "Processing..." : "Checkout with Stripe"}
+          {loading ? "Processing..." : "Confirm Order"}
         </button>
       </div>
       {error && <p style={{ marginTop: 20, color: "#c0392b" }}>{error}</p>}
