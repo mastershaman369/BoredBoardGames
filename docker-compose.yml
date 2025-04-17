@@ -17,3 +17,13 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongo_data:
