@@ -13,7 +13,7 @@ SAMPLE_CATEGORIES = [
     {
         "category_id": uuid.uuid4(),
         "name": "Classic Games",
-        "description": "Timeless classics.",
+        "description": "Don't be bored, play a board game! Rediscover timeless classics that bring friends together, boost hand-eye coordination, and provide a screen-free escape. Explore our <a href='/collections/puzzles'>Puzzles</a>.",
         "slug": "classic-games",
         "tags": ["classic", "board"],
         "image": "",
@@ -22,7 +22,7 @@ SAMPLE_CATEGORIES = [
     {
         "category_id": uuid.uuid4(),
         "name": "Puzzles",
-        "description": "Puzzles and brain teasers.",
+        "description": "Don't be bored, play a board game! Dive into mind-bending puzzles that challenge you offline, spark laughter with friends, and sharpen your problem-solving skills. Check out <a href='/collections/classic-games'>Classic Games</a> for more excitement.",
         "slug": "puzzles",
         "tags": ["puzzle", "brain"],
         "image": "",
@@ -34,7 +34,7 @@ SAMPLE_PRODUCTS = [
     {
         "product_id": uuid.uuid4(),
         "name": "Luxury Wooden Monopoly Board",
-        "description": "Premium Monopoly board with wooden finish.",
+        "description": "Don't be bored, play a board game! Our Luxury Wooden Monopoly Board turns family game nights into a premium, tactile experience. Crafted from rich wood, it's perfect for sparking friendly competition, improving negotiation skills, and giving your eyes a break from the screen.",
         "price": 199.99,
         "sale_price": 149.99,
         "images": ["/images/monopoly-wood.jpg"],
@@ -49,7 +49,7 @@ SAMPLE_PRODUCTS = [
     {
         "product_id": uuid.uuid4(),
         "name": "Super Rubik's Cube",
-        "description": "A challenging Rubik's Cube variant.",
+        "description": "Don't be bored, play a board game! Meet the Super Rubik's Cube, a next-level puzzle that challenges your mind and dexterity. Race friends to solve it, boost hand-eye coordination, and unplug from the digital world for pure, tactile fun.",
         "price": 29.99,
         "sale_price": 19.99,
         "images": ["/images/super-rubiks-cube.jpg"],
@@ -70,16 +70,22 @@ async def main():
     client = AsyncIOMotorClient(MONGO_URI)
     await init_beanie(database=client.get_default_database(), document_models=[Product, Category])
 
-    # Insert categories
+    # Upsert categories
     for cat in SAMPLE_CATEGORIES:
-        exists = await Category.find_one(Category.slug == cat["slug"])
-        if not exists:
+        db_cat = await Category.find_one(Category.slug == cat["slug"])
+        if db_cat:
+            db_cat.description = cat["description"]
+            await db_cat.save()
+        else:
             await Category(**cat).insert()
 
-    # Insert products
+    # Upsert products
     for prod in SAMPLE_PRODUCTS:
-        exists = await Product.find_one(Product.slug == prod["slug"])
-        if not exists:
+        db_prod = await Product.find_one(Product.slug == prod["slug"])
+        if db_prod:
+            db_prod.description = prod["description"]
+            await db_prod.save()
+        else:
             await Product(**prod).insert()
 
 if __name__ == "__main__":
