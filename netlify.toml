@@ -1,17 +1,17 @@
 [build]
+  base    = "frontend"
   command = "npm run build"
   publish = ".next"
-  base = "frontend"
-
-[dev]
-  command = "npm run dev"
-  port = 3000
-  framework = "next"
-
-[[redirects]]
-  from = "/api/*"
-  to = "http://localhost:8000/api/:splat"
-  status = 200
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+[dev]
+  command   = "npm run dev"
+  framework = "next"
+  port      = 3000
+
+[[redirects]]
+  from   = "/api/*"
+  to     = "http://localhost:8000/api/:splat"
+  status = 200
