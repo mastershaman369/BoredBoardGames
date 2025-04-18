@@ -37,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
     const access = res.data.access_token;
     localStorage.setItem("token", access);
+    document.cookie = `token=${access}; path=/;`;
     setToken(access);
   };
 
@@ -48,11 +49,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
     const access = res.data.access_token;
     localStorage.setItem("token", access);
+    document.cookie = `token=${access}; path=/;`;
     setToken(access);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
+    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
     setToken(null);
     router.push("/");
   };
