@@ -1,56 +1,55 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import HeroBanner from "../components/HeroBanner";
-import CategoryFilter from "../components/CategoryFilter";
-import ProductCard from "../components/ProductCard";
-import { Container, Box } from "@mui/material";
-import { getProducts, getCategories } from "../utils/api";
-import { useCart } from "../context/CartContext";
-import { useToast } from "../context/ToastContext";
+import React, { useEffect, useState, useRef } from "react";
+import { Box, Typography, CircularProgress, Button } from "@mui/material";
+import useAnalytics from "../../hooks/useAnalytics";
 
 export default function Home() {
+  const { track } = useAnalytics();
   const [products, setProducts] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const { addToCart } = useCart();
-  const { showToast } = useToast();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const limit = 10;
+  const isFirstLoad = useRef(true);
 
   useEffect(() => {
-    getCategories().then(setCategories);
-    getProducts().then(setProducts);
-  }, []);
+    if (isFirstLoad.current) {
+      track("page_view", { page: "home" });
+      isFirstLoad.current = false;
+    }
+    fetch(`/api/products?limit=${limit}&offset=${offset}`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setProducts(prev => offset === 0 ? data : [...prev, ...data]);
+          setHasMore(data.length === limit);
+        } else {
+          setError("Failed to load products.");
+        }
+      })
+      .catch(() => setError("Failed to load products."))
+      .finally(() => setLoading(false));
+    // eslint-disable-next-line
+  }, [offset]);
 
-  const handleCategoryChange = (catId: string | null) => {
-    setSelectedCategory(catId);
-    getProducts(catId || undefined).then(setProducts);
-  };
-
-  const handleAddToCart = (product: any) => {
-    addToCart(product);
-    showToast(`Added "${product.name}" to cart!`);
-  };
+  if (loading && offset === 0) return <Box sx={{ mt: 8, textAlign: "center" }}><CircularProgress /></Box>;
+  if (error) return <Box sx={{ mt: 8, textAlign: "center", color: "red" }}>{error}</Box>;
+  if (!products.length) return <Box sx={{ mt: 8, textAlign: "center" }}>No products found.</Box>;
 
   return (
-    <>
-      <HeroBanner />
-      <Container sx={{ backgroundColor: '#ffffff', mt: 4, mb: 4, p: 4, borderRadius: 2 }} id="products">
-        <CategoryFilter
-          categories={categories}
-          selected={selectedCategory}
-          onChange={handleCategoryChange}
-        />
-        <Box component="div" sx={{
-          display: "grid",
-          gap: 3,
-          gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)" },
-        }}>
-          {products.map((product) => (
-            <Box key={product.id}>
-              <ProductCard product={product} onAddToCart={handleAddToCart} />
-            </Box>
-          ))}
+    <Box sx={{ maxWidth: 900, mx: "auto", mt: 5, p: 3, background: "#fff", borderRadius: 2, boxShadow: 1 }}>
+      <Typography variant="h2" gutterBottom>Marketplace</Typography>
+      {products.map((p: any) => (
+        <Box key={p.id} sx={{ mb: 3, p: 2, border: "1px solid #eee", borderRadius: 1, cursor: "pointer" }}
+          onClick={() => track("product_click", { productId: p.id })}>
+          <Typography variant="h5">{p.name}</Typography>
+          <Typography>${p.price}</Typography>
         </Box>
-      </Container>
-    </>
+      ))}
+      {hasMore && (
+        <Button variant="outlined" onClick={() => setOffset(offset + limit)} sx={{ mt: 2 }}>Load More</Button>
+      )}
+    </Box>
   );
 }
