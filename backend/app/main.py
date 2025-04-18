@@ -20,10 +20,10 @@ load_dotenv()
 
 app = FastAPI()
 
-# CORS setup for local/frontend dev
+# CORS setup for Netlify staging
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://boredboardgames-staging.windsurf.build"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
