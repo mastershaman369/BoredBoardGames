@@ -34,3 +34,9 @@ export const setLayawayEnabled = async (enabled: boolean) => {
   const res = await axios.put(`${API_BASE}/settings`, { layaway_enabled: enabled });
   return res.data;
 };
+
+// Fetch single product by slug
+export const getProduct = async (slug: string) => {
+  const res = await axios.get(`${API_BASE}/products/${slug}`);
+  return res.data;
+};

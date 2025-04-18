@@ -9,7 +9,7 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  image_url: string;
+  images: string[];
   category_id?: string;
 }
 
@@ -38,7 +38,7 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
     <main style={{ maxWidth: 600, margin: "32px auto", background: "#fff", borderRadius: 8, boxShadow: "0 2px 12px #eee", padding: 32 }}>
       <button onClick={() => router.back()} style={{ marginBottom: 20, background: "#eee", border: "none", borderRadius: 4, padding: "6px 14px", cursor: "pointer" }}>&larr; Back</button>
       <div style={{ display: "flex", gap: 32 }}>
-        <img src={product.image_url} alt={product.name} style={{ width: 220, height: 220, objectFit: "cover", borderRadius: 8 }} />
+        <img src={product.images[0] ?? '/placeholder.png'} alt={product.name} style={{ width: 220, height: 220, objectFit: "cover", borderRadius: 8 }} />
         <div>
           <h1>{product.name}</h1>
           <p style={{ color: "#555", fontSize: 16 }}>{product.description}</p>

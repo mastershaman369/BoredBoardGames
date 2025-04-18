@@ -63,7 +63,14 @@ async def remove_product(product_id: str):
 
 @router.get("/products/{product_id}", response_model=Product)
 async def get_product(product_id: str):
-    db_product = await Product.find_one(Product.id == product_id)
+    # Attempt to find by slug first
+    db_product = await Product.find_one(Product.slug == product_id)
+    if not db_product:
+        # Fallback: treat param as ObjectId
+        try:
+            db_product = await Product.find_one(Product.id == PydanticObjectId(product_id))
+        except Exception:
+            db_product = None
     if not db_product:
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product

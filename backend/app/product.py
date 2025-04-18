@@ -18,6 +18,19 @@ class Product(Document):
     specs: Dict[str, Any] = Field(default_factory=dict)
     slug: str = Field(..., max_length=200)
     custom_url: Optional[str] = None
+    vendor: Optional[str] = Field(default="", max_length=100)
+    currency: str = Field(default="USD", max_length=10)
+    alibaba_product_id: Optional[str] = Field(default=None, max_length=200)
+    alibaba_sku_id: Optional[str] = Field(default=None, max_length=200)
+    cost_price: Optional[float] = Field(default=None, ge=0)
+    weight: Optional[float] = Field(default=None, ge=0)
+    length: Optional[float] = Field(default=None, ge=0)
+    width: Optional[float] = Field(default=None, ge=0)
+    height: Optional[float] = Field(default=None, ge=0)
+    shipping_template_id: Optional[str] = Field(default=None)
+    moq: Optional[int] = Field(default=None, ge=0)
+    product_url: Optional[str] = Field(default=None)
+    variants: List[Dict[str, Any]] = Field(default_factory=list)
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
 
