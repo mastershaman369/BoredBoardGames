@@ -19,7 +19,7 @@ export default function NavBar() {
       marginBottom: 32,
       fontFamily: "inherit"
     }}>
-      <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
+      <div style={{ width: "100%", maxWidth: "var(--max-width)", margin: "0 auto", display: "flex", gap: 32, alignItems: "center" }}>
         <Link href="/" style={{ color: "#fff", textDecoration: "none", fontWeight: 700, fontSize: 20 }}>
           Bored Board Games
         </Link>

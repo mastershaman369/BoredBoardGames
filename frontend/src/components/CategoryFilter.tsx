@@ -11,13 +11,18 @@ interface CategoryFilterProps {
 export default function CategoryFilter({ categories, selected, onChange }: CategoryFilterProps) {
   return (
     <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', justifyContent: 'center', my: 4 }}>
-      <Button variant={selected === null ? 'contained' : 'outlined'} onClick={() => onChange(null)}>
+      <Button 
+        variant={selected === null ? 'contained' : 'outlined'} 
+        sx={{ borderRadius: '20px', textTransform: 'none', px: 2 }} 
+        onClick={() => onChange(null)}
+      >
         All
       </Button>
       {categories.map((cat) => (
         <Button
           key={cat.id}
           variant={selected === cat.id ? 'contained' : 'outlined'}
+          sx={{ borderRadius: '20px', textTransform: 'none', px: 2 }}
           onClick={() => onChange(cat.id)}
         >
           {cat.name}

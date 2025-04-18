@@ -1,5 +1,4 @@
 "use client";
-"use client";
 import React, { useEffect, useState } from "react";
 import HeroBanner from "../components/HeroBanner";
 import CategoryFilter from "../components/CategoryFilter";
@@ -34,7 +33,7 @@ export default function Home() {
   return (
     <>
       <HeroBanner />
-      <Container sx={{ mt: 4 }} id="products">
+      <Container sx={{ backgroundColor: '#ffffff', mt: 4, mb: 4, p: 4, borderRadius: 2 }} id="products">
         <CategoryFilter
           categories={categories}
           selected={selectedCategory}
