@@ -40,3 +40,15 @@ export const getProduct = async (slug: string) => {
   const res = await axios.get(`${API_BASE}/products/${slug}`);
   return res.data;
 };
+
+// Fetch user profile
+export const getProfile = async () => {
+  const res = await axios.get(`${API_BASE}/profiles/me`);
+  return res.data;
+};
+
+// Fetch user orders
+export const getOrders = async () => {
+  const res = await axios.get(`${API_BASE}/orders`);
+  return res.data;
+};

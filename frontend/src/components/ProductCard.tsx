@@ -18,6 +18,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const [hovered, setHovered] = useState(false);
   const hasSecondImage = product.images && product.images.length > 1;
+  const mainImage = product.images?.[0] || "/images/placeholder.jpg";
   return (
     <div
       style={{
@@ -40,7 +41,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
         <div style={{ position: 'relative', width: '100%', aspectRatio: '1/1', overflow: 'hidden', background: '#f7f7f7' }}>
           <img
             src={
-              hovered && hasSecondImage ? product.images[1] : product.images[0] ?? '/placeholder.png'
+              hovered && hasSecondImage ? product.images[1] : mainImage
             }
             alt={product.name}
             style={{
@@ -50,6 +51,7 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
               display: 'block',
               transition: 'opacity 0.25s',
             }}
+            onError={(e: any) => { e.target.onerror = null; e.target.src = "/images/placeholder.jpg"; }}
           />
         </div>
         <div style={{ padding: 16, paddingBottom: 0 }}>

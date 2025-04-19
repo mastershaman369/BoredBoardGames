@@ -5,10 +5,10 @@ export default function HeroBanner() {
   return (
     <Box
       sx={{
-        backgroundImage: 'url(/images/catan.jpg)',
+        backgroundImage: 'url(/images/hero-group-boardgame.jpg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        height: 400,
+        height: 420,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
